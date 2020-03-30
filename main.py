@@ -163,6 +163,4 @@ class Class:
 		return str(self._dept.get_name()) + ", " + str(self._course.get_number()) + ", " + str(self._room.get_number()) + ", " + \
 				str(self._instructor.get_idno()) + ", " + str(self._meetingTime.get_idno())
 		
-
-
 data = Data()
