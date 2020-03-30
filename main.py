@@ -41,7 +41,60 @@ class Data:
 		def get_numberOfClasses(self): return self._numberOfClasses
 
 class Schedule:
-	pass
+	def __init__(self):
+		self._data = data
+		self._classes = []
+		self._numOfConflicts = 0
+		self._fitness = -1
+		self._classNumb = 0
+		self._isFitnessChanged = True
+
+	def get_classes(self):
+		self._isFitnessChanged = True
+		return self._classes
+
+	def get_numOfConflicts(self):
+		return self._numOfConflicts
+
+	def get_fitness(self):
+		if(self._isFitnessChanged == True):
+			self._fitness = self.calculate_fitness()
+			self._isFitnessChanged = False
+		return self._fitness
+	def initialize(self):	
+		depts = self._data.get_depts()
+		for i in range(len(depts)):
+			courses = depts[i].get_courses()
+			for j in range(len(courses)):
+				newClass = Class(self._classNumb, depts[i], courses[j])
+				self._classNumb = self._classNumb + 1
+				newClass.set_meetingTime(data.get_meetingTimes()[rnd.randrange(0, len(data.get_meetingTimes()))])
+				newClass.set_room(data.get_rooms()[rnd.randrange(0, len(data.get_rooms()))])
+				newClass.set_instructor(courses[j].get_instructors()[rnd.randrange(0, len(courses[j].get_instructors()))])
+				self._classes.append(newClass)
+		return self
+
+	def calculate_fitness():
+		self._numOfConflicts = 0
+		classes = self.get_classes()
+		for i in range(len(classes)):
+			if(classes[i].get_room(.get_seatingCapacity()<classes[i].get_course().getmaxNumOfStudents())):
+				self._numOfConflicts = self._numOfConflicts + 1
+			for j in range(len(classes)):
+				if(j >= 1):
+					if(classes[i].get_meetingTime() == classes[j].get_meetingTime() and classes[i].get_idno()!= classes[j].get_idno()):
+						if(classes[i].get_room() == classes[j].get_room()): self._numOfConflicts = self._numOfConflicts + 1
+						if(classes[i].get_instructor() == classes[j].get_instructor()): self._numOfConflicts = self._numOfConflicts + 1
+		return (1/(1.0*self._numOfConflicts + 1))
+
+	def __str__(self):
+		returnValue = ""
+		for i in range(len(self._classes) - 1):
+			returnValue = returnValue + str(self._classes[i]) + ", "
+		returnValue = returnValue + str(self._classes[len(self.classes) - 1])
+		return returnValue
+
+
 class Population:
 	pass
 
@@ -110,3 +163,6 @@ class Class:
 		return str(self._dept.get_name()) + ", " + str(self._course.get_number()) + ", " + str(self._room.get_number()) + ", " + \
 				str(self._instructor.get_idno()) + ", " + str(self._meetingTime.get_idno())
 		
+
+
+data = Data()
